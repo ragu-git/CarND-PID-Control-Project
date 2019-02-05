@@ -15,7 +15,7 @@ The D - "differential", component counteracts the P component's tendency to ring
 The I - "integral", component counteracts a bias in the CTE which prevents the P-D controller from reaching the center line. This bias can take several forms, such as a steering drift (as in the Control unit lessons), but I believe that in this particular implementation the I component particularly serves to reduce the CTE around curves.
 
 
-Describe how the final hyperparameters were chosen.
+### Describe how the final hyperparameters were chosen.
 Optimize init parameters for each PID coefficient
 
 Although it is removed from the final code, I had used Twiddle a little bit to try out different parameters, but found the values found in the original project lessons to be sufficient under my current implementation. I had also used an approach with SGD (stochastic gradient descent) before, but that did not seem to perform as well as Twiddle. I ended up deciding against Twiddle as the results tended to vary greatly - one build of my PID Controller, in a test of 10 runs around the track, made it around six times, half of which were very slow, with the others (using a throttle fully based on steering angle instead of the measured approach I use now with a percentage of steering + a set value) limiting to race around the track at 50mph. Unfortunately, there were also three runs ending with crashes, two of which even happened before the first curve. Part of this was due to noise/variance in the simulator itself, from the looks of it.
