@@ -2,7 +2,27 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+In this C++ project, I use a Proportional-Integral-Derivative Controller, or PID for short, in order to drive a simulated car around a virtual track. The project involves implementing the controller primarily for the steering angle of the car (although I used the value from this controller to also determine throttle), as well as tuning coefficients for each PID value in order to calculate a steering angle that keeps the car on the track.
 
+Project Steps
+Implement PID Controller for Steering (optional: controlling throttle as well)
+
+Describe the effect each of the P, I, D components had in your implementation.
+The P - "proportional", component had the most directly observable effect on the car's behavior. It causes the car to steer proportional (and opposite) to the car's distance from the lane center (which is the CTE) - if the car is far to the right it steers hard to the left, if it's slightly to the left it steers slightly to the right.
+
+The D - "differential", component counteracts the P component's tendency to ring and overshoot the center line. A properly tuned D parameter will cause the car to approach the center line smoothly without ringing.
+
+The I - "integral", component counteracts a bias in the CTE which prevents the P-D controller from reaching the center line. This bias can take several forms, such as a steering drift (as in the Control unit lessons), but I believe that in this particular implementation the I component particularly serves to reduce the CTE around curves.
+
+
+Describe how the final hyperparameters were chosen.
+Optimize init parameters for each PID coefficient
+
+Although it is removed from the final code, I had used Twiddle a little bit to try out different parameters, but found the values found in the original project lessons to be sufficient under my current implementation. I had also used an approach with SGD (stochastic gradient descent) before, but that did not seem to perform as well as Twiddle. I ended up deciding against Twiddle as the results tended to vary greatly - one build of my PID Controller, in a test of 10 runs around the track, made it around six times, half of which were very slow, with the others (using a throttle fully based on steering angle instead of the measured approach I use now with a percentage of steering + a set value) limiting to race around the track at 50mph. Unfortunately, there were also three runs ending with crashes, two of which even happened before the first curve. Part of this was due to noise/variance in the simulator itself, from the looks of it.
+
+In the end, the final values were determined by manual tuning. The ratio of the coefficients to each other that I chose (0.2, 0.004, 3.0) for determing steer value and  (0.316731, 0.0000, 0.0226185) for determining throttle seemed to work well, and I also tried lowering & raising them in conjunction with each other as well as tuning each individually. I typically found that I was creating too high of steering angles (causing crashes if the speed had gotten too high on a straight) by raising them in conjunction with each other, while lowering all of them together meant the car struggled on the larger curves, sometimes not turning enough and shooting off the track. Also i was controlling the car throttle based on the cars speed , if the car speed exceeds speed limit (50mph) then reduce the throttle value to 0.2. Which helped the car in maintaining constant speed.
+
+---
 ## Dependencies
 
 * cmake >= 3.5
